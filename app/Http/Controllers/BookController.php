@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -13,6 +14,7 @@ class BookController extends Controller
     {
         return view('books.index', [
             'title' => 'Daftar Buku',
+            'books' => Book::latest()->get(),
         ]);
     }
 
@@ -37,18 +39,22 @@ class BookController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Book $book)
     {
-        //
+        return view('books.show', [
+            'title' => 'Detail Buku',
+            'book' => $book,
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Book $book)
     {
         return view('books.edit', [
             'title' => 'Edit Buku',
+            'book' => $book,
         ]);
     }
 
