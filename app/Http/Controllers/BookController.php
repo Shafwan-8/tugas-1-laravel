@@ -56,7 +56,7 @@ class BookController extends Controller
 
         Book::create($validatedData);
 
-        return redirect()->route('books.index')->with('success', 'Buku berhasil ditambahkan.');
+        return to_route('books.index')->with('success', 'Buku berhasil ditambahkan.');
     }
 
     /**
@@ -86,7 +86,30 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
-        //
+        $validatedData = $request->validate([
+            'judul' => 'required',
+            'penulis' => 'required',
+            'penerbit' => 'required',
+            'tahun_terbit' => 'required|digits:4|integer',
+            'stok' => 'required|integer|min:0',
+            'kategori' => 'required',
+        ],
+        [
+            'judul.required' => 'Judul buku harus diisi.',
+            'penulis.required' => 'Nama penulis harus diisi.',
+            'penerbit.required' => 'Nama penerbit harus diisi.',
+            'tahun_terbit.required' => 'Tahun terbit harus diisi.',
+            'tahun_terbit.digits' => 'Tahun terbit harus terdiri dari 4 digit.',
+            'tahun_terbit.integer' => 'Tahun terbit harus berupa angka.',
+            'stok.required' => 'Stok buku harus diisi.',
+            'stok.integer' => 'Stok buku harus berupa angka.',
+            'stok.min' => 'Stok buku tidak boleh kurang dari 0.',
+            'kategori.required' => 'Kategori buku harus diisi.',
+        ]);
+
+        $book->update($validatedData);
+
+        return to_route('books.index')->with('success', 'Buku berhasil diperbarui.');
     }
 
     /**
