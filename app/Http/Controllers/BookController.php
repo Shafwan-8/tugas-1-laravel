@@ -33,7 +33,30 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'judul' => 'required',
+            'penulis' => 'required',
+            'penerbit' => 'required',
+            'tahun_terbit' => 'required|digits:4|integer',
+            'stok' => 'required|integer|min:0',
+            'kategori' => 'required',
+        ],
+        [
+            'judul.required' => 'Judul buku harus diisi.',
+            'penulis.required' => 'Nama penulis harus diisi.',
+            'penerbit.required' => 'Nama penerbit harus diisi.',
+            'tahun_terbit.required' => 'Tahun terbit harus diisi.',
+            'tahun_terbit.digits' => 'Tahun terbit harus terdiri dari 4 digit.',
+            'tahun_terbit.integer' => 'Tahun terbit harus berupa angka.',
+            'stok.required' => 'Stok buku harus diisi.',
+            'stok.integer' => 'Stok buku harus berupa angka.',
+            'stok.min' => 'Stok buku tidak boleh kurang dari 0.',
+            'kategori.required' => 'Kategori buku harus diisi.',
+        ]);
+
+        Book::create($validatedData);
+
+        return redirect()->route('books.index')->with('success', 'Buku berhasil ditambahkan.');
     }
 
     /**
@@ -61,7 +84,7 @@ class BookController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Book $book)
     {
         //
     }
@@ -69,8 +92,8 @@ class BookController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Book $book)
     {
-        //
+        
     }
 }
